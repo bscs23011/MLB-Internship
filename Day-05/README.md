@@ -16,5 +16,5 @@ Bar graph for students who needs more improvement
 
 Three key insights you discovered from the dataset.
 The ethnicitiy columns has a lot of missing values (307)
-Students are given scores out of 5 rather than 100.
-it had 4 main subjects: math , science, language, englush
+Students are given scores out of 5 rather than 100, , so averages and comparisons are based on grade points rather than percentages.
+Language has the highest average means that student performance the best in this subject.
