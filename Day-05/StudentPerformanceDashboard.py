@@ -3,6 +3,10 @@ import matplotlib.pyplot as plt
 
 data=pd.read_csv('student-dataset.csv')
 
+data = data.drop_duplicates()
+
+data = data.dropna()
+
 # How many students are in the dataset?
 number = len(data)
 print(f"total number of students: {number}")
