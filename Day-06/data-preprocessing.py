@@ -40,44 +40,5 @@ x_test_scaled = scaler.transform(x_test)
 print(x_train_scaled.mean(axis=0))
 print(x_train_scaled.std(axis=0))
 print(x_test_scaled.mean(axis=0))
-print(x_test_scaled.std(axis=0))
-
-
-
-#Machine Learning
-
-# Make predictions on the test dataset.
-
-model = LinearRegression()
-model.fit(x_train_scaled, y_train)
-y_pred = model.predict(x_test_scaled)
-
-
-# Compare Actual vs Predicted values.
-
-plt.scatter(y_test, y_pred)
-plt.xlabel("Actual values")
-plt.ylabel("Predicted values")
-plt.title("Actual vs predicted values")
-plt.show()
-plt.savefig("actual_vs_predicted.png")
-
-# Calculate:
-
-  
-# Mean Absolute Error (MAE)
-
-mae = mean_absolute_error(y_test, y_pred)
-print("Mean absolute error :", mae)
-
-# Mean Squared Error (MSE)
-
-mse = mean_squared_error(y_test, y_pred)
-print("Mean squared error  :", mse)
-
-# R² Score
-
-r2 = r2_score(y_test, y_pred)
-print("R² Score :", r2)
-
+print(x_test_scaled.std(axis=0))    
 
