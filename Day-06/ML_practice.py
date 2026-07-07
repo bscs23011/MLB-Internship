@@ -55,6 +55,6 @@ print("Mean squared error  :", mse)
 # R² Score
 
 r2 = r2_score(y_test, y_pred)
-print("R² Score :", r2)
+print("R Score :", r2)
 
 
