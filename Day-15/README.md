@@ -1,11 +1,17 @@
-Each transformation you implemented
+Each transformation you implemented:
+
 Perspective Transformation: Corrected the document's perspective by mapping its four corner points to a rectangular shape. This removed the tilted appearance and made the document look like it was scanned from above.
+
 Grayscale Conversion: Converted the color image into a single-channel grayscale image. This simplified processing and made the text easier to analyze.
+
 Noise Reduction (Median Blur): Applied a median blur filter to remove random noise and small unwanted dots while preserving the edges of the text.
+
 Brightness and Contrast Enhancement: Increased the brightness and contrast of the document to make the text darker and the background clearer, improving readability.
+
 Image Sharpening: Applied a sharpening filter to enhance the edges of letters and make the text appear crisper and more defined.
 
 2. The purpose of each enhancement technique
+   
 Perspective Transformation: Straightens tilted or skewed documents so they appear flat and properly aligned.
 Grayscale Conversion: Removes unnecessary color information, reducing computational complexity and preparing the image for further processing.
 Noise Reduction: Eliminates unwanted noise caused by scanning, camera sensors, or poor lighting while maintaining text quality.
