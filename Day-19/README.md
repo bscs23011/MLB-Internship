@@ -11,16 +11,16 @@ footage.
 Raw traffic videos
       │
       ▼
-Extract frames  (extract_frames.py)
+Extract frames  (frames.py)
       │
       ▼
-Annotate frames (annotation_tool/  --  optionally pre-filled by auto_annotate.py)
+Annotate frames 
       │
       ▼
-Analyze dataset (analyze_dataset.py)  -- check class balance per video
+Analyze dataset (analyze_dataset.py) 
       │
       ▼
-Split train / val / test (final_split.py)
+Split train / val / test (split.py)
       │
       ▼
 Train YOLOv8n from scratch (Google Colab)
@@ -30,9 +30,7 @@ Evaluate on held-out test set (get mAP / precision / recall)
       │
       ▼
 Track + count vehicles on new video (tracking.py)
-```
 
----
 
 ## Folder structure
 
@@ -42,9 +40,9 @@ project/
 ├── frames/                  extracted frames (output of extract_frames.py)
 ├── labels/                  YOLO .txt annotation files, one per frame
 ├── classes.txt              your class list, one per line, in class-ID order
-├── extract_frames.py
+├── frames.py
 ├── analyze_dataset.py
-├── final_split.py
+├── split.py
 ├── tracking.py
 ├── dataset/                 created by final_split.py (train/val/test folders)
 ├── best.pt                  your trained model weights (downloaded from Colab)
@@ -62,7 +60,7 @@ project/
 Put your raw videos in one folder, then run:
 
 ```bash
-python extract_frames.py
+python frames.py
 ```
 
 This samples frames from every video at a fixed interval (edit `FRAME_INTERVAL`
@@ -85,7 +83,6 @@ Open `classes.txt` and edit your class list — one name per line. **The line or
 becomes the class ID your model learns** (line 1 = class 0, line 2 = class 1,
 etc.), so lock this in before you start annotating.
 
-### (Optional but recommended) Pre-fill boxes automatically first
 
 ```bash
 python auto_annotate.py
@@ -146,11 +143,11 @@ you risk removing a class from training entirely.
 
 ## Step 4 — Split into train / val / test
 
-Edit `final_split.py` to set which videos go into `TEST_VIDEOS` and `VAL_VIDEOS`
+Edit `split.py` to set which videos go into `TEST_VIDEOS` and `VAL_VIDEOS`
 (everything else automatically goes to train), then run:
 
 ```bash
-python final_split.py
+python split.py
 ```
 
 This produces `dataset/train`, `dataset/val`, and `dataset/test`, each with
@@ -170,8 +167,7 @@ Upload your `dataset/` folder to Google Drive, then in Colab:
 ```python
 from ultralytics import YOLO
 
-model = YOLO("yolov8n.yaml")   # architecture only, random weights = true "from scratch"
-# ⚠️ do NOT use "yolov8n.pt" — that loads pretrained COCO weights instead
+model = YOLO("yolov8n.yaml") 
 
 model.train(
     data="/content/drive/MyDrive/dataset/data.yaml",
@@ -216,24 +212,14 @@ python tracking.py
 ```
 
 Runs your trained model with an object tracker (ByteTrack) over a video,
-drawing a bounding box, class label, and a visual trail behind each tracked
-object, plus a running count in the corner. Each object is counted once
-(using its tracked ID), not once per frame — giving you results like
+drawing a bounding box, class label. Each object is counted once it passes through the tracking line, the box turns
+from yellow to green once it is detected — giving you results like
 "8 cars, 2 motorcycles, 5 rickshaws passed."
 
-Edit `MODEL_PATH` and `VIDEO_PATH` at the top of the script before running.
+Edit `model_path` and `video_path` at the top of the script before running.
 
 ---
 
-## Known limitations (worth stating honestly in your report)
-
-- **Small, imbalanced training data.** A from-scratch model needs far more data
-  than a fine-tuned one to reach strong accuracy — some rarer classes may show
-  noticeably lower precision/recall than car, simply due to fewer training examples.
-- **Domain shift between videos.** A model trained on one camera angle/lighting
-  setup may perform worse on footage that looks meaningfully different (distance,
-  angle, resolution) — even for well-represented classes.
-- **Tracking count accuracy depends on detection consistency.** If the detector
-  misses an object for several consecutive frames (more likely for the weaker
-  classes), the tracker may assign it a new ID when it reappears, inflating that
-  class's count.
+## LINK FOR OUTPUT VIDEOS
+[object detection](https://drive.google.com/drive/folders/1m6eS438NmAIlPbST5IBIv9rshE7uasdi?usp=sharing)
+[object tracking](https://drive.google.com/file/d/1CFqM--aLM-XrA395e9fJPd1GJlUahxO5/view?usp=sharing)
