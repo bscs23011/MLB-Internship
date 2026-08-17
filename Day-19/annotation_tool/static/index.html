@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Vehicle Annotation Tool</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>Vehicle Annotation Tool</h1>
+      <div id="progress">Loading...</div>
+    </header>
+
+    <div id="main">
+      <div id="canvas-wrap">
+        <canvas id="canvas"></canvas>
+      </div>
+
+      <aside id="sidebar">
+        <div class="panel">
+          <h3>Class <span class="hint">(number keys 1-9)</span></h3>
+          <select id="class-select"></select>
+        </div>
+
+        <div class="panel">
+          <h3>Boxes on this frame</h3>
+          <ul id="box-list"></ul>
+          <p id="no-boxes-msg" class="hint">No boxes yet. Click and drag on the image to draw one.</p>
+        </div>
+
+        <div class="panel">
+          <h3>Navigation</h3>
+          <div class="nav-buttons">
+            <button id="prev-btn">&larr; Prev (A)</button>
+            <button id="next-btn">Next (D) &rarr;</button>
+          </div>
+          <button id="save-btn" class="save-btn">Save (S)</button>
+          <div id="filename" class="hint"></div>
+        </div>
+
+        <div class="panel hint">
+          <h3>Shortcuts</h3>
+          <ul class="shortcut-list">
+            <li><b>Click+drag on empty area</b> — draw new box</li>
+            <li><b>Click a box</b> — select it (shows corner handles)</li>
+            <li><b>Drag inside selected box</b> — move it</li>
+            <li><b>Drag a corner handle</b> — resize it</li>
+            <li><b>1-9</b> — set active class (for new boxes)</li>
+            <li><b>Backspace/Delete</b> — delete selected box</li>
+            <li><b>Escape</b> — deselect</li>
+            <li><b>A / &larr;</b> — previous frame (auto-saves)</li>
+            <li><b>D / &rarr;</b> — next frame (auto-saves)</li>
+            <li><b>S</b> — save current frame</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>
