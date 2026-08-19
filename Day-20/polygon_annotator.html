@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Polygon Annotator — YOLO-Seg Export</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<style>
+  :root{
+    --ink:#1b1d1f;
+    --paper:#eef0ef;
+    --panel:#181a1c;
+    --line:#33373a;
+    --accent:#5ee6c2;
+    --accent-dim:#2c7a68;
+    --warn:#e6935e;
+    --mono: 'SF Mono', 'JetBrains Mono', Consolas, monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:var(--ink);
+    color:var(--paper);
+    font-family:var(--mono);
+    font-size:13px;
+    display:flex;
+    flex-direction:column;
+  }
+  header{
+    padding:14px 20px;
+    border-bottom:1px solid var(--line);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  header h1{
+    font-size:15px;
+    letter-spacing:0.04em;
+    margin:0;
+    text-transform:uppercase;
+    color:var(--accent);
+    font-weight:600;
+  }
+  .sub{color:#8a8f92; font-size:11px; margin-top:2px;}
+  .top-controls{display:flex; gap:8px; align-items:center; flex-wrap:wrap;}
+  button, .file-btn{
+    background:var(--panel);
+    border:1px solid var(--line);
+    color:var(--paper);
+    padding:7px 12px;
+    font-family:var(--mono);
+    font-size:12px;
+    cursor:pointer;
+    border-radius:3px;
+    transition:border-color .15s, color .15s;
+  }
+  button:hover, .file-btn:hover{border-color:var(--accent); color:var(--accent);}
+  button:disabled{opacity:0.35; cursor:not-allowed;}
+  button.primary{background:var(--accent-dim); border-color:var(--accent); color:#eafff8;}
+  button.primary:hover{background:var(--accent); color:#0a1512;}
+  input[type=file]{display:none;}
+  input[type=text], select{
+    background:var(--panel); border:1px solid var(--line); color:var(--paper);
+    padding:6px 8px; font-family:var(--mono); font-size:12px; border-radius:3px;
+  }
+
+  main{
+    flex:1;
+    display:flex;
+    min-height:0;
+  }
+  #sidebar{
+    width:220px;
+    border-right:1px solid var(--line);
+    overflow-y:auto;
+    flex-shrink:0;
+  }
+  #imgList{list-style:none; margin:0; padding:0;}
+  #imgList li{
+    padding:8px 12px;
+    border-bottom:1px solid #232628;
+    cursor:pointer;
+    font-size:11.5px;
+    color:#9ba0a3;
+    display:flex; justify-content:space-between; gap:6px;
+  }
+  #imgList li:hover{background:#202325;}
+  #imgList li.active{background:#20342e; color:var(--accent);}
+  #imgList li .cnt{color:#565b5e; font-size:10.5px;}
+  #imgList li.done .cnt{color:var(--accent-dim);}
+
+  #canvasArea{
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    overflow:auto;
+    background:
+      linear-gradient(45deg, #202325 25%, transparent 25%),
+      linear-gradient(-45deg, #202325 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #202325 75%),
+      linear-gradient(-45deg, transparent 75%, #202325 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    background-color:#151718;
+  }
+  #canvasWrap{position:relative;}
+  canvas{display:block; cursor:crosshair;}
+
+  #rightPanel{
+    width:250px;
+    border-left:1px solid var(--line);
+    display:flex;
+    flex-direction:column;
+    flex-shrink:0;
+  }
+  .panel-section{padding:14px; border-bottom:1px solid var(--line);}
+  .panel-section h2{
+    font-size:10.5px; text-transform:uppercase; letter-spacing:0.08em;
+    color:#7c8184; margin:0 0 10px 0; font-weight:600;
+  }
+  .row{display:flex; gap:8px; align-items:center; margin-bottom:8px;}
+  .row label{color:#9ba0a3; font-size:11px; width:70px; flex-shrink:0;}
+  .row input, .row select{flex:1; min-width:0;}
+  #polyList{list-style:none; margin:0; padding:0; max-height:180px; overflow-y:auto;}
+  #polyList li{
+    padding:6px 8px; font-size:11px; color:#9ba0a3;
+    border-bottom:1px solid #232628;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  #polyList li .del{color:var(--warn); cursor:pointer; font-size:11px;}
+  #polyList li .del:hover{color:#ff7a4d;}
+  .hint{color:#65696c; font-size:10.5px; line-height:1.5; margin-top:6px;}
+  .badge{
+    display:inline-block; background:var(--accent-dim); color:#eafff8;
+    padding:1px 6px; border-radius:8px; font-size:10px; margin-left:4px;
+  }
+  footer{
+    padding:8px 20px; border-top:1px solid var(--line);
+    font-size:11px; color:#65696c; display:flex; justify-content:space-between;
+  }
+  #emptyState{
+    color:#565b5e; text-align:center; padding:40px; font-size:12px; line-height:1.7;
+  }
+  #emptyState .file-btn{margin-top:12px; display:inline-block;}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Polygon Annotator</h1>
+    <div class="sub">Click points to trace an object → close the shape → export YOLO-seg labels</div>
+  </div>
+  <div class="top-controls">
+    <label class="file-btn">Load Images
+      <input type="file" id="imgInput" accept="image/*" multiple>
+    </label>
+    <button id="exportBtn" class="primary" disabled>Export YOLO-Seg (.zip)</button>
+  </div>
+</header>
+
+<main>
+  <div id="sidebar">
+    <ul id="imgList"></ul>
+  </div>
+
+  <div id="canvasArea">
+    <div id="emptyState">
+      No images loaded yet.<br>
+      Load 50–60 images of your object, then click around<br>
+      each one's outline to draw a polygon mask.
+      <br>
+      <label class="file-btn">Load Images
+        <input type="file" id="imgInput2" accept="image/*" multiple>
+      </label>
+    </div>
+    <div id="canvasWrap" style="display:none;">
+      <canvas id="canvas"></canvas>
+    </div>
+  </div>
+
+  <div id="rightPanel">
+    <div class="panel-section">
+      <h2>Class</h2>
+      <div class="row">
+        <label>Name</label>
+        <input type="text" id="className" value="object" placeholder="e.g. bottle">
+      </div>
+      <div class="hint">Single class dataset. This name only labels your export folder — class id is always 0.</div>
+    </div>
+
+    <div class="panel-section">
+      <h2>Controls</h2>
+      <div class="hint">
+        • Left click — add point<br>
+        • Click first point (or press <b>Enter</b>) — close polygon<br>
+        • <b>Z</b> — undo last point<br>
+        • <b>Esc</b> — cancel current polygon<br>
+        • <b>Backspace</b> on a polygon in list — delete it
+      </div>
+    </div>
+
+    <div class="panel-section" style="flex:1; overflow:hidden; display:flex; flex-direction:column;">
+      <h2>Polygons on this image <span class="badge" id="polyCount">0</span></h2>
+      <ul id="polyList"></ul>
+    </div>
+
+    <div class="panel-section">
+      <button id="prevBtn" style="width:100%; margin-bottom:6px;">← Previous image</button>
+      <button id="nextBtn" style="width:100%;">Next image →</button>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <span id="statusLeft">0 images loaded</span>
+  <span id="statusRight">0 annotated</span>
+</footer>
+
+<script>
+(function(){
+  const imgInput = document.getElementById('imgInput');
+  const imgInput2 = document.getElementById('imgInput2');
+  const imgList = document.getElementById('imgList');
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  const canvasWrap = document.getElementById('canvasWrap');
+  const emptyState = document.getElementById('emptyState');
+  const polyListEl = document.getElementById('polyList');
+  const polyCountEl = document.getElementById('polyCount');
+  const exportBtn = document.getElementById('exportBtn');
+  const classNameInput = document.getElementById('className');
+  const statusLeft = document.getElementById('statusLeft');
+  const statusRight = document.getElementById('statusRight');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+
+  // images: [{file, name, img, width, height, polygons: [[{x,y},...], ...]}]
+  let images = [];
+  let currentIndex = -1;
+  let currentPoints = []; // points of polygon in progress, in image pixel coords
+  let displayScale = 1;
+
+  function handleFiles(fileList){
+    const files = Array.from(fileList).filter(f => f.type.startsWith('image/'));
+    let loadedCount = 0;
+    files.forEach(file => {
+      const url = URL.createObjectURL(file);
+      const im = new Image();
+      im.onload = () => {
+        images.push({
+          file, name: file.name, img: im,
+          width: im.naturalWidth, height: im.naturalHeight,
+          polygons: []
+        });
+        loadedCount++;
+        if (currentIndex === -1) selectImage(0);
+        renderImgList();
+        updateStatus();
+      };
+      im.src = url;
+    });
+  }
+
+  imgInput.addEventListener('change', e => handleFiles(e.target.files));
+  imgInput2.addEventListener('change', e => handleFiles(e.target.files));
+
+  function renderImgList(){
+    imgList.innerHTML = '';
+    images.forEach((item, i) => {
+      const li = document.createElement('li');
+      li.className = (i === currentIndex ? 'active ' : '') + (item.polygons.length > 0 ? 'done' : '');
+      const nameSpan = document.createElement('span');
+      nameSpan.textContent = item.name.length > 20 ? item.name.slice(0,17)+'…' : item.name;
+      const cntSpan = document.createElement('span');
+      cntSpan.className = 'cnt';
+      cntSpan.textContent = item.polygons.length;
+      li.appendChild(nameSpan);
+      li.appendChild(cntSpan);
+      li.onclick = () => selectImage(i);
+      imgList.appendChild(li);
+    });
+  }
+
+  function selectImage(i){
+    if (i < 0 || i >= images.length) return;
+    currentIndex = i;
+    currentPoints = [];
+    emptyState.style.display = 'none';
+    canvasWrap.style.display = 'block';
+    drawCanvas();
+    renderImgList();
+    renderPolyList();
+    updateStatus();
+  }
+
+  function fitScale(item){
+    const maxW = Math.min(window.innerWidth - 520, 1000);
+    const maxH = window.innerHeight - 160;
+    const scale = Math.min(maxW / item.width, maxH / item.height, 1);
+    return scale;
+  }
+
+  function drawCanvas(){
+    const item = images[currentIndex];
+    if (!item) return;
+    displayScale = fitScale(item);
+    canvas.width = item.width * displayScale;
+    canvas.height = item.height * displayScale;
+    ctx.setTransform(displayScale, 0, 0, displayScale, 0, 0);
+    ctx.clearRect(0, 0, item.width, item.height);
+    ctx.drawImage(item.img, 0, 0);
+
+    // draw completed polygons
+    item.polygons.forEach((poly, idx) => {
+      drawPolygon(poly, '#5ee6c2', true, idx);
+    });
+
+    // draw in-progress polygon
+    if (currentPoints.length > 0){
+      drawPolygon(currentPoints, '#e6935e', false, null);
+    }
+  }
+
+  function drawPolygon(points, color, closed, labelIdx){
+    if (points.length === 0) return;
+    ctx.lineWidth = 2 / displayScale;
+    ctx.strokeStyle = color;
+    ctx.fillStyle = color + '33';
+
+    ctx.beginPath();
+    ctx.moveTo(points[0].x, points[0].y);
+    for (let i = 1; i < points.length; i++){
+      ctx.lineTo(points[i].x, points[i].y);
+    }
+    if (closed){
+      ctx.closePath();
+      ctx.fill();
+    }
+    ctx.stroke();
+
+    points.forEach((p, i) => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 4 / displayScale, 0, Math.PI*2);
+      ctx.fillStyle = i === 0 ? '#fff' : color;
+      ctx.fill();
+    });
+
+    if (labelIdx !== null){
+      const cx = points.reduce((s,p)=>s+p.x,0) / points.length;
+      const cy = points.reduce((s,p)=>s+p.y,0) / points.length;
+      ctx.fillStyle = '#0a1512';
+      ctx.fillRect(cx-10/displayScale, cy-8/displayScale, 20/displayScale, 16/displayScale);
+      ctx.fillStyle = '#5ee6c2';
+      ctx.font = (12/displayScale) + 'px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(labelIdx+1, cx, cy+4/displayScale);
+    }
+  }
+
+  canvas.addEventListener('click', e => {
+    if (currentIndex === -1) return;
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / displayScale;
+    const y = (e.clientY - rect.top) / displayScale;
+
+    // check if clicking near first point to close
+    if (currentPoints.length >= 3){
+      const first = currentPoints[0];
+      const dist = Math.hypot((x-first.x), (y-first.y));
+      if (dist < 10 / displayScale){
+        closePolygon();
+        return;
+      }
+    }
+    currentPoints.push({x, y});
+    drawCanvas();
+  });
+
+  function closePolygon(){
+    if (currentPoints.length < 3) return;
+    images[currentIndex].polygons.push(currentPoints);
+    currentPoints = [];
+    drawCanvas();
+    renderPolyList();
+    renderImgList();
+    updateStatus();
+  }
+
+  function renderPolyList(){
+    const item = images[currentIndex];
+    polyListEl.innerHTML = '';
+    if (!item) { polyCountEl.textContent = '0'; return; }
+    polyCountEl.textContent = item.polygons.length;
+    item.polygons.forEach((poly, idx) => {
+      const li = document.createElement('li');
+      const label = document.createElement('span');
+      label.textContent = `Polygon ${idx+1} (${poly.length} pts)`;
+      const del = document.createElement('span');
+      del.className = 'del';
+      del.textContent = '✕';
+      del.onclick = () => {
+        item.polygons.splice(idx, 1);
+        drawCanvas();
+        renderPolyList();
+        renderImgList();
+        updateStatus();
+      };
+      li.appendChild(label);
+      li.appendChild(del);
+      polyListEl.appendChild(li);
+    });
+  }
+
+  function updateStatus(){
+    const annotated = images.filter(i => i.polygons.length > 0).length;
+    statusLeft.textContent = `${images.length} images loaded`;
+    statusRight.textContent = `${annotated} annotated`;
+    exportBtn.disabled = annotated === 0;
+  }
+
+  document.addEventListener('keydown', e => {
+    if (currentIndex === -1) return;
+    if (e.key === 'Enter'){
+      closePolygon();
+    } else if (e.key === 'z' || e.key === 'Z'){
+      if (currentPoints.length > 0){
+        currentPoints.pop();
+        drawCanvas();
+      }
+    } else if (e.key === 'Escape'){
+      currentPoints = [];
+      drawCanvas();
+    } else if (e.key === 'ArrowRight'){
+      selectImage(currentIndex + 1);
+    } else if (e.key === 'ArrowLeft'){
+      selectImage(currentIndex - 1);
+    }
+  });
+
+  prevBtn.onclick = () => selectImage(currentIndex - 1);
+  nextBtn.onclick = () => selectImage(currentIndex + 1);
+
+  window.addEventListener('resize', () => { if (currentIndex !== -1) drawCanvas(); });
+
+  exportBtn.addEventListener('click', async () => {
+    const zip = new JSZip();
+    const imagesFolder = zip.folder('images');
+    const labelsFolder = zip.folder('labels');
+    const className = classNameInput.value.trim() || 'object';
+
+    for (const item of images){
+      if (item.polygons.length === 0) continue;
+
+      // write label txt in YOLO-seg normalized format
+      const lines = item.polygons.map(poly => {
+        const coords = poly.map(p => {
+          const nx = (p.x / item.width).toFixed(6);
+          const ny = (p.y / item.height).toFixed(6);
+          return `${nx} ${ny}`;
+        }).join(' ');
+        return `0 ${coords}`;
+      });
+      const baseName = item.name.replace(/\.[^/.]+$/, '');
+      labelsFolder.file(baseName + '.txt', lines.join('\n') + '\n');
+
+      // include the original image bytes
+      const arrayBuffer = await item.file.arrayBuffer();
+      imagesFolder.file(item.name, arrayBuffer);
+    }
+
+    // classes.txt / notes
+    zip.file('classes.txt', `0: ${className}\n`);
+
+    const blob = await zip.generateAsync({type:'blob'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'yolo_seg_dataset.zip';
+    a.click();
+  });
+
+})();
+</script>
+
+</body>
+</html>
