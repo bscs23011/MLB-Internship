@@ -124,4 +124,4 @@ the exact same architecture and size, so this difference likely comes from
 the pretrained model producing cleaner, more confident predictions, which
 means less post-processing work needs to happen afterward.
 
-
+## The output for the fine-tuned model is given in the "fine-tuned" folder but the model which was trained from scratch wasn't able to detect a single pothole. 
