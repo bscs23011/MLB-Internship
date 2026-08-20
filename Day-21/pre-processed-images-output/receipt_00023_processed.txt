@@ -1,0 +1,13 @@
+|.	(x=160, y=224, w=188, h=54)	conf=33
+-”	(x=162, y=280, w=24, h=37)	conf=5
+m+	(x=284, y=289, w=44, h=20)	conf=23
+OCIOIOR	(x=60, y=297, w=91, h=38)	conf=0
+RCI	(x=157, y=297, w=29, h=38)	conf=26
+ROR	(x=195, y=297, w=29, h=38)	conf=29
+ROOK	(x=233, y=297, w=68, h=38)	conf=0
+=	(x=318, y=313, w=4, h=2)	conf=34
+BLE	(x=119, y=329, w=30, h=15)	conf=68
+&	(x=160, y=330, w=7, h=11)	conf=44
+ORR	(x=304, y=317, w=52, h=18)	conf=0
+HCOHO	(x=364, y=309, w=35, h=37)	conf=0
+Bu	(x=122, y=327, w=17, h=21)	conf=62

@@ -1,0 +1,16 @@
+3x	(x=144, y=384, w=17, h=16)	conf=75
+6500	(x=279, y=388, w=43, h=14)	conf=47
+TALA	(x=144, y=406, w=43, h=16)	conf=40
+UNGU	(x=198, y=408, w=34, h=15)	conf=74
+DISC	(x=141, y=428, w=36, h=16)	conf=90
+ITEH	(x=188, y=430, w=34, h=15)	conf=90
+AMOUNT	(x=140, y=449, w=54, h=16)	conf=90
+1K	(x=140, y=471, w=16, h=15)	conf=89
+0	(x=276, y=473, w=17, h=15)	conf=60
+HIKA	(x=136, y=493, w=36, h=16)	conf=78
+KECIL	(x=183, y=495, w=45, h=15)	conf=78
+4.00xITEHs	(x=238, y=518, w=92, h=17)	conf=51
+SUBTOTAL	(x=132, y=538, w=75, h=18)	conf=96
+TOTAL	(x=133, y=561, w=90, h=19)	conf=96
+CASH	(x=128, y=585, w=75, h=19)	conf=96
+CHANGE	(x=127, y=609, w=114, h=19)	conf=95

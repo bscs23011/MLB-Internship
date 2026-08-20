@@ -1,0 +1,11 @@
+1	(x=84, y=299, w=5, h=18)	conf=93
+GRAINS	(x=104, y=299, w=65, h=20)	conf=95
+PAN	(x=181, y=300, w=32, h=19)	conf=96
+BREAD	(x=225, y=301, w=54, h=19)	conf=96
+20,500	(x=415, y=296, w=69, h=23)	conf=88
+1	(x=84, y=326, w=4, h=18)	conf=76
+ICED	(x=104, y=326, w=42, h=20)	conf=91
+HIBISCUS	(x=158, y=327, w=87, h=20)	conf=93
+LYCHEE	(x=259, y=328, w=64, h=19)	conf=93
+TEA	(x=337, y=328, w=30, h=19)	conf=90
+37,000	(x=414, y=324, w=70, h=23)	conf=59

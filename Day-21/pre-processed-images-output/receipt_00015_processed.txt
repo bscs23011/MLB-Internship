@@ -1,0 +1,4 @@
+Pepenero	(x=264, y=779, w=123, h=29)	conf=92
+Pastel	(x=402, y=775, w=88, h=27)	conf=95
+Tax	(x=264, y=940, w=43, h=25)	conf=96
+(10.0%)	(x=330, y=938, w=98, h=29)	conf=96
