@@ -1,0 +1,42 @@
+[
+    {
+        "text": "B",
+        "display_text": "Unreadable",
+        "status": "Unreadable",
+        "x": 0,
+        "y": 0,
+        "width": 32,
+        "height": 87,
+        "confidence": 0
+    },
+    {
+        "text": "DzI7",
+        "display_text": "Unreadable",
+        "status": "Unreadable",
+        "x": 61,
+        "y": 0,
+        "width": 202,
+        "height": 73,
+        "confidence": 43
+    },
+    {
+        "text": "xr",
+        "display_text": "xr",
+        "status": "Readable",
+        "x": 188,
+        "y": 0,
+        "width": 66,
+        "height": 87,
+        "confidence": 68
+    },
+    {
+        "text": "§",
+        "display_text": "§",
+        "status": "Readable",
+        "x": 291,
+        "y": 8,
+        "width": 29,
+        "height": 79,
+        "confidence": 55
+    }
+]
