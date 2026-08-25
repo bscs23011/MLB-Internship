@@ -1,0 +1,42 @@
+{
+  "query_image": "1.jpg",
+  "top_5_similar": [
+    {
+      "filename": "1_resized.jpg",
+      "cosine_similarity": 0.9872
+    },
+    {
+      "filename": "1_bright.jpg",
+      "cosine_similarity": 0.9757
+    },
+    {
+      "filename": "1_cropped.jpg",
+      "cosine_similarity": 0.8032
+    },
+    {
+      "filename": "berlin_1266630_1.jpg",
+      "cosine_similarity": 0.6948
+    },
+    {
+      "filename": "berlin_9991_2.jpg",
+      "cosine_similarity": 0.6425
+    }
+  ],
+  "duplicate_pairs": [
+    {
+      "image1": "1.jpg",
+      "image2": "1_bright.jpg",
+      "hamming_distance": 6
+    },
+    {
+      "image1": "1.jpg",
+      "image2": "1_resized.jpg",
+      "hamming_distance": 0
+    },
+    {
+      "image1": "1_bright.jpg",
+      "image2": "1_resized.jpg",
+      "hamming_distance": 6
+    }
+  ]
+}
