@@ -1,0 +1,211 @@
+{
+  "images": [
+    {
+      "filename": "1.jpg",
+      "caption": "a young girl climbing on a rope"
+    },
+    {
+      "filename": "10.jpg",
+      "caption": "a man standing on a frozen lake with a dog"
+    },
+    {
+      "filename": "11.jpg",
+      "caption": "a dog running through a hose in a yard"
+    },
+    {
+      "filename": "12.jpg",
+      "caption": "two dogs playing on the road"
+    },
+    {
+      "filename": "13.jpg",
+      "caption": "a little girl in a pink dress"
+    },
+    {
+      "filename": "14.jpg",
+      "caption": "a man and woman sitting on a bench"
+    },
+    {
+      "filename": "15.jpg",
+      "caption": "a girl in the water"
+    },
+    {
+      "filename": "16.jpg",
+      "caption": "a child playing in a water slide"
+    },
+    {
+      "filename": "17.jpg",
+      "caption": "a man and his dog"
+    },
+    {
+      "filename": "18.jpg",
+      "caption": "a girl climbing a rock wall"
+    },
+    {
+      "filename": "19.jpg",
+      "caption": "two boys in a room"
+    },
+    {
+      "filename": "2.jpg",
+      "caption": "a dog running in a field"
+    },
+    {
+      "filename": "20.jpg",
+      "caption": "a boy swimming in the water"
+    },
+    {
+      "filename": "21.jpg",
+      "caption": "a dog in a pool"
+    },
+    {
+      "filename": "22.jpg",
+      "caption": "a man climbing up a steep in the mountains"
+    },
+    {
+      "filename": "23.jpg",
+      "caption": "a dog and a dog are standing on the ground"
+    },
+    {
+      "filename": "24.jpg",
+      "caption": "a group of horses standing around a fire"
+    },
+    {
+      "filename": "25.jpg",
+      "caption": "a man climbing on a rock"
+    },
+    {
+      "filename": "3.jpg",
+      "caption": "a large rock wall"
+    },
+    {
+      "filename": "4.jpg",
+      "caption": "a child sitting in the grass"
+    },
+    {
+      "filename": "5.jpg",
+      "caption": "a young boy riding a bike on a dirt road"
+    },
+    {
+      "filename": "6.jpg",
+      "caption": "a boy eating a piece of pizza"
+    },
+    {
+      "filename": "7.jpg",
+      "caption": "a dog with a frck"
+    },
+    {
+      "filename": "8.jpg",
+      "caption": "two dogs running on the beach"
+    },
+    {
+      "filename": "9.jpg",
+      "caption": "a dog catching a frur"
+    }
+  ],
+  "queries": [
+    {
+      "query": "Someone moving upward during an adventure",
+      "results": [
+        {
+          "rank": 1,
+          "filename": "22.jpg",
+          "similarity_score": 0.2827,
+          "caption": "a man climbing up a steep in the mountains"
+        },
+        {
+          "rank": 2,
+          "filename": "3.jpg",
+          "similarity_score": 0.2671,
+          "caption": "a large rock wall"
+        },
+        {
+          "rank": 3,
+          "filename": "18.jpg",
+          "similarity_score": 0.257,
+          "caption": "a girl climbing a rock wall"
+        },
+        {
+          "rank": 4,
+          "filename": "19.jpg",
+          "similarity_score": 0.2473,
+          "caption": "two boys in a room"
+        },
+        {
+          "rank": 5,
+          "filename": "1.jpg",
+          "similarity_score": 0.2469,
+          "caption": "a young girl climbing on a rope"
+        }
+      ]
+    },
+    {
+      "query": "Young people enjoying their free time",
+      "results": [
+        {
+          "rank": 1,
+          "filename": "19.jpg",
+          "similarity_score": 0.2501,
+          "caption": "two boys in a room"
+        },
+        {
+          "rank": 2,
+          "filename": "6.jpg",
+          "similarity_score": 0.2486,
+          "caption": "a boy eating a piece of pizza"
+        },
+        {
+          "rank": 3,
+          "filename": "1.jpg",
+          "similarity_score": 0.2448,
+          "caption": "a young girl climbing on a rope"
+        },
+        {
+          "rank": 4,
+          "filename": "3.jpg",
+          "similarity_score": 0.244,
+          "caption": "a large rock wall"
+        },
+        {
+          "rank": 5,
+          "filename": "15.jpg",
+          "similarity_score": 0.2375,
+          "caption": "a girl in the water"
+        }
+      ]
+    },
+    {
+      "query": "A fun moment with a companion",
+      "results": [
+        {
+          "rank": 1,
+          "filename": "12.jpg",
+          "similarity_score": 0.2483,
+          "caption": "two dogs playing on the road"
+        },
+        {
+          "rank": 2,
+          "filename": "9.jpg",
+          "similarity_score": 0.2436,
+          "caption": "a dog catching a frur"
+        },
+        {
+          "rank": 3,
+          "filename": "8.jpg",
+          "similarity_score": 0.2428,
+          "caption": "two dogs running on the beach"
+        },
+        {
+          "rank": 4,
+          "filename": "14.jpg",
+          "similarity_score": 0.2355,
+          "caption": "a man and woman sitting on a bench"
+        },
+        {
+          "rank": 5,
+          "filename": "7.jpg",
+          "similarity_score": 0.2348,
+          "caption": "a dog with a frck"
+        }
+      ]
+    }
+  ]
+}
